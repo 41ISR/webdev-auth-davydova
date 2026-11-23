@@ -2,11 +2,35 @@ import { useState } from "react"
 import Button from "../components/Button"
 import Input from "../components/Input"
 import { Link } from "react-router-dom"
+import { api } from "../api/api"
 
 const SignUp = () => {
     const [error, setError] = useState("")
 
-    const handleSubmit = () => {}
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setError("")
+
+        if (e.target.password.value !== e.target.password2.value) {
+            setError("Пароль не совпадает")
+            return  
+        }
+        const user = {
+            username: e.target.username.value,
+            password: e.target.password.value,
+            email: e.target.email.value,
+        }
+
+        try {
+            const res = api.registerUser(user)
+            console.log(res)
+
+        } catch (error) {
+            console.error(error)
+            setError(error.response.data.error)
+        }
+
+    }
 
     return (
         <div className="auth-page">
